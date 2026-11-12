@@ -27,6 +27,10 @@
             width: 100%;
             height: 100%;
             z-index: 1;
+            cursor: grab;
+        }
+        #webgl-canvas:active {
+            cursor: grabbing;
         }
 
         /* VR Reticle Pointer */
@@ -54,7 +58,7 @@
         #vr-reticle .reticle-ring {
             width: 18px;
             height: 18px;
-            border: 2px solid rgba(255, 255, 255, 0.5);
+            border: 2px solid rgba(255, 255, 255, 0.4);
             border-radius: 50%;
             position: absolute;
             top: 0;
@@ -76,40 +80,57 @@
             to { transform: scale(1.8) rotate(360deg); }
         }
 
-        /* Top Header Banner */
-        #course-badge {
+        /* Top Planet Quick-Bar */
+        #planet-quick-bar {
             position: absolute;
-            top: 16px;
-            left: 20px;
-            z-index: 10;
-            background: rgba(10, 16, 28, 0.85);
-            padding: 10px 18px;
-            border-radius: 10px;
+            top: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 6px;
+            background: rgba(10, 16, 28, 0.88);
+            padding: 6px 12px;
+            border-radius: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            z-index: 30;
+            overflow-x: auto;
+            max-width: 95vw;
+        }
+        .planet-quick-btn {
+            background: rgba(255, 255, 255, 0.06);
             border: 1px solid rgba(255, 255, 255, 0.12);
-            backdrop-filter: blur(8px);
+            color: #d0e0f8;
+            font-size: 11px;
+            font-weight: 600;
+            padding: 6px 12px;
+            border-radius: 16px;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.2s ease;
         }
-        #course-badge h1 {
-            font-size: 15px;
+        .planet-quick-btn:hover {
+            background: rgba(255, 204, 0, 0.25);
+            border-color: #ffcc00;
+            color: #ffea70;
+            transform: translateY(-1px);
+        }
+        .planet-quick-btn.active {
+            background: #ffcc00;
+            color: #0a1020;
+            border-color: #ffcc00;
             font-weight: 700;
-            color: #ffcc00;
-            letter-spacing: 0.5px;
-            text-transform: uppercase;
-        }
-        #course-badge p {
-            font-size: 12px;
-            color: #9ab0d0;
-            margin-top: 3px;
         }
 
         /* Planet Information Card (World-Space VR UI Simulation) */
         #planet-info-panel {
             position: absolute;
-            top: 20px;
+            top: 70px;
             right: 20px;
             width: 340px;
             max-width: 90vw;
-            background: rgba(9, 14, 26, 0.92);
-            border: 1px solid rgba(255, 204, 0, 0.35);
+            background: rgba(9, 14, 26, 0.94);
+            border: 1px solid rgba(255, 204, 0, 0.4);
             border-radius: 12px;
             padding: 20px;
             box-shadow: 0 12px 35px rgba(0, 0, 0, 0.8), 0 0 20px rgba(255, 204, 0, 0.15);
@@ -149,16 +170,18 @@
             font-weight: 600;
         }
         .close-btn {
-            background: none;
+            background: rgba(255, 255, 255, 0.1);
             border: none;
-            color: #8899aa;
-            font-size: 20px;
+            color: #ffffff;
+            font-size: 18px;
             cursor: pointer;
             line-height: 1;
-            padding: 2px 6px;
+            padding: 4px 8px;
+            border-radius: 6px;
         }
         .close-btn:hover {
-            color: #ff5555;
+            background: rgba(255, 60, 60, 0.6);
+            color: #ffffff;
         }
         .stat-grid {
             display: grid;
@@ -204,12 +227,12 @@
             left: 50%;
             transform: translateX(-50%);
             display: flex;
-            gap: 12px;
-            background: rgba(10, 16, 28, 0.85);
+            gap: 10px;
+            background: rgba(10, 16, 28, 0.88);
             padding: 10px 18px;
             border-radius: 30px;
             border: 1px solid rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(8px);
+            backdrop-filter: blur(10px);
             z-index: 20;
         }
         .control-btn {
@@ -239,11 +262,11 @@
         /* Quick Instructions */
         #instructions {
             position: absolute;
-            bottom: 75px;
+            bottom: 72px;
             left: 50%;
             transform: translateX(-50%);
             font-size: 11px;
-            color: rgba(255, 255, 255, 0.6);
+            color: rgba(255, 255, 255, 0.65);
             letter-spacing: 0.4px;
             text-align: center;
             pointer-events: none;
@@ -262,56 +285,63 @@
         <div class="reticle-ring"></div>
     </div>
 
-    <!-- Header Badge -->
-    <div id="course-badge">
-        <h1>Virtual Solar System</h1>
-        <p>Explore planets revolving around the Sun in Mobile Virtual Reality</p>
+    <!-- Top Planet Quick-Bar: Instant Navigation -->
+    <div id="planet-quick-bar">
+        <button class="planet-quick-btn" data-planet="Sun">☀️ Sun</button>
+        <button class="planet-quick-btn" data-planet="Mercury">☿ Mercury</button>
+        <button class="planet-quick-btn" data-planet="Venus">♀ Venus</button>
+        <button class="planet-quick-btn" data-planet="Earth">🌍 Earth</button>
+        <button class="planet-quick-btn" data-planet="Mars">♂ Mars</button>
+        <button class="planet-quick-btn" data-planet="Jupiter">♃ Jupiter</button>
+        <button class="planet-quick-btn" data-planet="Saturn">🪐 Saturn</button>
+        <button class="planet-quick-btn" data-planet="Uranus">⛢ Uranus</button>
+        <button class="planet-quick-btn" data-planet="Neptune">♆ Neptune</button>
     </div>
 
     <!-- Interactive Planet Information Panel -->
     <div id="planet-info-panel">
         <div class="panel-header">
             <div>
-                <h2 id="planet-name">EARTH</h2>
-                <span class="badge-type" id="planet-type">Terrestrial Planet</span>
+                <h2 id="planet-name">SATURN</h2>
+                <span class="badge-type" id="planet-type">Gas Giant</span>
             </div>
             <button class="close-btn" id="close-panel-btn">&times;</button>
         </div>
         <div class="stat-grid">
             <div class="stat-item">
                 <div class="stat-label">Distance from Sun</div>
-                <div class="stat-val" id="planet-dist">149.6M km (1.0 AU)</div>
+                <div class="stat-val" id="planet-dist">1.43B km (9.58 AU)</div>
             </div>
             <div class="stat-item">
                 <div class="stat-label">Orbital Period</div>
-                <div class="stat-val" id="planet-orbit">365.25 Days</div>
+                <div class="stat-val" id="planet-orbit">29.45 Earth Years</div>
             </div>
             <div class="stat-item">
                 <div class="stat-label">Rotation Period</div>
-                <div class="stat-val" id="planet-rot">24 Hours</div>
+                <div class="stat-val" id="planet-rot">10h 33m</div>
             </div>
             <div class="stat-item">
                 <div class="stat-label">Diameter</div>
-                <div class="stat-val" id="planet-diam">12,742 km</div>
+                <div class="stat-val" id="planet-diam">116,460 km</div>
             </div>
             <div class="stat-item">
                 <div class="stat-label">Known Moons</div>
-                <div class="stat-val" id="planet-moons">1</div>
+                <div class="stat-val" id="planet-moons">146</div>
             </div>
             <div class="stat-item">
                 <div class="stat-label">Avg Temperature</div>
-                <div class="stat-val" id="planet-temp">15 °C</div>
+                <div class="stat-val" id="planet-temp">-140 °C</div>
             </div>
         </div>
         <div class="fact-box">
             <b>Scientific Fact:</b>
-            <span id="planet-fact">Earth is the only known planet in the universe that supports life and possesses liquid water oceans.</span>
+            <span id="planet-fact">Saturn features the solar system's most dazzling ring structure, composed of billions of sparkling particles of water ice and rock.</span>
         </div>
     </div>
 
     <!-- Keybind Hints -->
     <div id="instructions">
-        Gaze (look) at any planet for 1.2s or Click to inspect • Drag mouse to rotate head view • [T] Top View • [Space] Pause • [C] Cycle Camera
+        Drag mouse to orbit 360° • Scroll to zoom • Click any planet or button above to fly to it • [T] Top View • [Space] Pause
     </div>
 
     <!-- Bottom Controls HUD -->
@@ -319,14 +349,14 @@
         <button class="control-btn" id="pause-btn">⏸ Pause Orbits</button>
         <button class="control-btn" id="speed-btn">⚡ Speed: 1x</button>
         <button class="control-btn" id="topview-btn">🗺️ Top View [T]</button>
-        <button class="control-btn" id="cycle-btn">🎥 View: Angled 3D</button>
+        <button class="control-btn" id="reset-cam-btn">🔭 Reset View</button>
     </div>
 
-    <!-- Three.js 3D Engine for browser simulation -->
+    <!-- Three.js 3D Engine -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 
     <script>
-        // --- Web Audio Synthesizer (Zero-dependency cosmic audio) ---
+        // --- Web Audio Synthesizer ---
         let audioCtx = null;
         function playChime(freq, duration, gainVal) {
             try {
@@ -345,7 +375,7 @@
             } catch (e) {}
         }
 
-        // --- Celestial Bodies Data (From Week 1 & PlanetData.cs) ---
+        // --- Celestial Bodies Data ---
         const CELESTIAL_DATA = [
             {
                 name: "Sun",
@@ -361,8 +391,7 @@
                 orbitRadius: 0,
                 orbitSpeed: 0,
                 rotSpeed: 0.004,
-                color: 0xffbb00,
-                emissive: 0xffaa00
+                color: 0xffbb00
             },
             {
                 name: "Mercury",
@@ -500,24 +529,24 @@
         const scene = new THREE.Scene();
         scene.background = new THREE.Color(0x020308);
 
-        const camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 1500);
         const renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true });
         renderer.setSize(window.innerWidth, window.innerHeight);
         renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
-        // --- Ambient & Point Lights ---
-        const ambientLight = new THREE.AmbientLight(0x222633, 0.7);
+        // --- Lights ---
+        const ambientLight = new THREE.AmbientLight(0x222633, 0.8);
         scene.add(ambientLight);
 
-        const sunLight = new THREE.PointLight(0xfffaea, 2.5, 300);
+        const sunLight = new THREE.PointLight(0xfffaea, 2.8, 400);
         scene.add(sunLight);
 
-        // --- Starfield Particle System (Week 1) ---
+        // --- Starfield Particle System ---
         const starCount = 900;
         const starGeometry = new THREE.BufferGeometry();
         const starPositions = new Float32Array(starCount * 3);
         for (let i = 0; i < starCount * 3; i += 3) {
-            const r = 120 + Math.random() * 80;
+            const r = 140 + Math.random() * 90;
             const theta = Math.random() * Math.PI * 2;
             const phi = Math.acos(2 * Math.random() - 1);
             starPositions[i] = r * Math.sin(phi) * Math.cos(theta);
@@ -525,7 +554,7 @@
             starPositions[i + 2] = r * Math.cos(phi);
         }
         starGeometry.setAttribute('position', new THREE.BufferAttribute(starPositions, 3));
-        const starMaterial = new THREE.PointsMaterial({ color: 0xffffff, size: 0.7, transparent: true, opacity: 0.8 });
+        const starMaterial = new THREE.PointsMaterial({ color: 0xffffff, size: 0.8, transparent: true, opacity: 0.8 });
         const starField = new THREE.Points(starGeometry, starMaterial);
         scene.add(starField);
 
@@ -542,7 +571,7 @@
             } else {
                 material = new THREE.MeshStandardMaterial({
                     color: data.color,
-                    roughness: 0.6,
+                    roughness: 0.55,
                     metalness: 0.15
                 });
             }
@@ -563,19 +592,19 @@
 
             // Saturn Rings
             if (data.hasRings) {
-                const ringGeo = new THREE.RingGeometry(data.radius * 1.35, data.radius * 2.3, 40);
+                const ringGeo = new THREE.RingGeometry(data.radius * 1.35, data.radius * 2.35, 48);
                 const ringMat = new THREE.MeshBasicMaterial({
                     color: 0xdec69a,
                     side: THREE.DoubleSide,
                     transparent: true,
-                    opacity: 0.7
+                    opacity: 0.75
                 });
                 const ringMesh = new THREE.Mesh(ringGeo, ringMat);
                 ringMesh.rotation.x = Math.PI / 2 + 0.35;
                 mesh.add(ringMesh);
             }
 
-            // Draw circular orbit line using LineLoop (LineRenderer concept)
+            // Circular orbit lines
             if (data.orbitRadius > 0) {
                 const orbitSegments = 80;
                 const orbitPoints = [];
@@ -584,7 +613,7 @@
                     orbitPoints.push(new THREE.Vector3(Math.cos(theta) * data.orbitRadius, 0, Math.sin(theta) * data.orbitRadius));
                 }
                 const orbitGeo = new THREE.BufferGeometry().setFromPoints(orbitPoints);
-                const orbitMat = new THREE.LineBasicMaterial({ color: data.color, transparent: true, opacity: 0.22 });
+                const orbitMat = new THREE.LineBasicMaterial({ color: data.color, transparent: true, opacity: 0.25 });
                 const orbitLine = new THREE.LineLoop(orbitGeo, orbitMat);
                 scene.add(orbitLine);
             }
@@ -598,105 +627,136 @@
             });
         });
 
-        // --- Camera Perspectives & Cycling (Week 1) ---
-        const VIEWS = [
-            { name: "Top View (Map)", pos: new THREE.Vector3(0, 115, 0.001), look: new THREE.Vector3(0, 0, 0) },
-            { name: "Angled 3D", pos: new THREE.Vector3(0, 42, 65), look: new THREE.Vector3(0, 0, 0) },
-            { name: "Inner Cockpit", pos: new THREE.Vector3(0, 4, 18), look: new THREE.Vector3(0, 0, -35) }
-        ];
-        let currentViewIndex = 1; // Default to Angled 3D
+        // --- Orbiting Camera State (Free 360° mouse drag) ---
+        let camRadius = 75;
+        let camTheta = 0;
+        let camPhi = Math.PI / 3; // 60 degrees down
+        let targetLookAt = new THREE.Vector3(0, 0, 0);
+
+        let focusedPlanetMesh = null;
         let isPaused = false;
         let speedMultiplier = 1.0;
         const speedOptions = [1.0, 2.0, 5.0, 0.5];
         let speedIndex = 0;
 
-        let focusedTarget = null;
-        let cameraTargetPos = VIEWS[currentViewIndex].pos.clone();
-        let cameraLookAt = VIEWS[currentViewIndex].look.clone();
-        camera.position.copy(cameraTargetPos);
-        camera.lookAt(cameraLookAt);
+        // --- Smooth Mouse Orbit Drag & Zoom ---
+        let isDragging = false;
+        let dragStartX = 0, dragStartY = 0;
+        let dragMoved = false;
 
-        // --- Mouse & VR Head Look Emulation ---
-        let isMouseDown = false;
-        let mouseX = 0, mouseY = 0;
-        let pitch = 0, yaw = 0;
-
-        window.addEventListener('mousedown', (e) => {
-            if (e.target.closest('#planet-info-panel') || e.target.closest('#bottom-controls')) return;
-            isMouseDown = true;
-            mouseX = e.clientX;
-            mouseY = e.clientY;
+        window.addEventListener('pointerdown', (e) => {
+            if (e.target.closest('#planet-info-panel') || e.target.closest('#bottom-controls') || e.target.closest('#planet-quick-bar')) return;
+            isDragging = true;
+            dragMoved = false;
+            dragStartX = e.clientX;
+            dragStartY = e.clientY;
         });
 
-        window.addEventListener('mouseup', () => { isMouseDown = false; });
+        window.addEventListener('pointermove', (e) => {
+            if (!isDragging) return;
+            const deltaX = e.clientX - dragStartX;
+            const deltaY = e.clientY - dragStartY;
 
-        window.addEventListener('mousemove', (e) => {
-            if (!isMouseDown) return;
-            const deltaX = e.clientX - mouseX;
-            const deltaY = e.clientY - mouseY;
-            mouseX = e.clientX;
-            mouseY = e.clientY;
+            if (Math.hypot(deltaX, deltaY) > 3) {
+                dragMoved = true;
+            }
 
-            yaw -= deltaX * 0.005;
-            pitch -= deltaY * 0.005;
-            pitch = Math.max(-1.4, Math.min(1.4, pitch));
+            dragStartX = e.clientX;
+            dragStartY = e.clientY;
+
+            camTheta -= deltaX * 0.005;
+            camPhi -= deltaY * 0.005;
+            // Clamp phi to prevent flipping
+            camPhi = Math.max(0.04, Math.min(Math.PI / 2 - 0.04, camPhi));
         });
 
-        // --- VR Gaze Raycasting & Dwell Selection (Week 4) ---
-        const raycaster = new THREE.Raycaster();
+        window.addEventListener('pointerup', (e) => {
+            if (isDragging && !dragMoved) {
+                // It was a direct click! Raycast to click any planet directly
+                handleClickRaycast(e.clientX, e.clientY);
+            }
+            isDragging = false;
+        });
+
+        // Mouse Wheel Zoom
+        window.addEventListener('wheel', (e) => {
+            camRadius += e.deltaY * 0.05;
+            camRadius = Math.max(12, Math.min(160, camRadius));
+        });
+
+        // Click Raycast (Click anywhere on a planet)
+        const mouseRaycaster = new THREE.Raycaster();
+        const mouseNorm = new THREE.Vector2();
+
+        function handleClickRaycast(screenX, screenY) {
+            mouseNorm.x = (screenX / window.innerWidth) * 2 - 1;
+            mouseNorm.y = -(screenY / window.innerHeight) * 2 + 1;
+            mouseRaycaster.setFromCamera(mouseNorm, camera);
+            const hits = mouseRaycaster.intersectObjects(planetMeshes);
+
+            if (hits.length > 0) {
+                const hitObj = hits[0].object;
+                const body = bodies.find(b => b.mesh === hitObj);
+                if (body) {
+                    selectPlanet(body.data, body.mesh);
+                }
+            }
+        }
+
+        // --- VR Center Gaze Reticle & Dwell Detection ---
+        const centerRaycaster = new THREE.Raycaster();
         const reticle = document.getElementById('vr-reticle');
-        let hoveredBody = null;
+        let currentHoveredBody = null;
         let dwellTimer = 0;
-        const dwellDuration = 1.2; // seconds
+        const dwellDuration = 1.3;
+        let hasTriggeredDwell = false;
 
-        function updateGazeRaycast(delta) {
-            // Raycast forward from center of screen (0, 0 in normalized coordinates)
-            raycaster.setFromCamera(new THREE.Vector2(0, 0), camera);
-            const intersects = raycaster.intersectObjects(planetMeshes);
+        function updateGazeReticle(delta) {
+            centerRaycaster.setFromCamera(new THREE.Vector2(0, 0), camera);
+            const intersects = centerRaycaster.intersectObjects(planetMeshes);
 
             if (intersects.length > 0) {
                 const hitObj = intersects[0].object;
                 const body = bodies.find(b => b.mesh === hitObj);
 
-                if (body) {
-                    if (hoveredBody !== body) {
-                        if (hoveredBody) hoveredBody.targetScale = 1.0;
-                        hoveredBody = body;
-                        hoveredBody.targetScale = 1.25;
+                // Ignore Sun for auto-dwell so it doesn't constantly beep
+                if (body && body.data.name !== "Sun") {
+                    if (currentHoveredBody !== body) {
+                        if (currentHoveredBody) currentHoveredBody.targetScale = 1.0;
+                        currentHoveredBody = body;
+                        currentHoveredBody.targetScale = 1.25;
                         reticle.classList.add('hovered');
-                        playChime(480, 0.08, 0.15);
+                        dwellTimer = 0;
+                        hasTriggeredDwell = false;
+                        playChime(480, 0.08, 0.12);
                     }
 
-                    dwellTimer += delta;
-                    if (dwellTimer > 0.3) reticle.classList.add('dwell-active');
+                    if (!hasTriggeredDwell) {
+                        dwellTimer += delta;
+                        if (dwellTimer > 0.3) reticle.classList.add('dwell-active');
 
-                    if (dwellTimer >= dwellDuration) {
-                        selectPlanet(body.data, body.mesh);
-                        dwellTimer = 0;
+                        if (dwellTimer >= dwellDuration) {
+                            selectPlanet(body.data, body.mesh);
+                            hasTriggeredDwell = true;
+                            reticle.classList.remove('dwell-active');
+                        }
                     }
                     return;
                 }
             }
 
-            // If nothing hit
-            if (hoveredBody) {
-                hoveredBody.targetScale = 1.0;
-                hoveredBody = null;
+            // If nothing hovered or looking at Sun
+            if (currentHoveredBody) {
+                currentHoveredBody.targetScale = 1.0;
+                currentHoveredBody = null;
                 reticle.classList.remove('hovered');
                 reticle.classList.remove('dwell-active');
                 dwellTimer = 0;
+                hasTriggeredDwell = false;
             }
         }
 
-        // Tap/Click to Select
-        window.addEventListener('click', (e) => {
-            if (e.target.closest('#planet-info-panel') || e.target.closest('#bottom-controls')) return;
-            if (hoveredBody) {
-                selectPlanet(hoveredBody.data, hoveredBody.mesh);
-            }
-        });
-
-        // --- Interactive UI Info Panel Display ---
+        // --- Planet Selection & Info Card ---
         const panel = document.getElementById('planet-info-panel');
         const pName = document.getElementById('planet-name');
         const pType = document.getElementById('planet-type');
@@ -707,6 +767,7 @@
         const pMoons = document.getElementById('planet-moons');
         const pTemp = document.getElementById('planet-temp');
         const pFact = document.getElementById('planet-fact');
+        const quickBtns = document.querySelectorAll('.planet-quick-btn');
 
         function selectPlanet(data, mesh) {
             pName.textContent = data.name.toUpperCase();
@@ -720,16 +781,40 @@
             pFact.textContent = data.fact;
 
             panel.classList.add('visible');
-            playChime(880, 0.25, 0.25);
+            playChime(880, 0.22, 0.25);
 
-            // Focus camera onto this planet
-            focusedTarget = mesh;
+            // Focus camera on this planet!
+            focusedPlanetMesh = mesh;
+
+            // Update top bar active state
+            quickBtns.forEach(btn => {
+                btn.classList.toggle('active', btn.getAttribute('data-planet') === data.name);
+            });
         }
 
-        document.getElementById('close-panel-btn').addEventListener('click', () => {
+        function resetToOverview() {
             panel.classList.remove('visible');
-            focusedTarget = null;
+            focusedPlanetMesh = null;
+            quickBtns.forEach(b => b.classList.remove('active'));
+            camRadius = 75;
+            camPhi = Math.PI / 3;
+            targetLookAt.set(0, 0, 0);
             playChime(580, 0.05, 0.15);
+        }
+
+        document.getElementById('close-panel-btn').addEventListener('click', resetToOverview);
+        document.getElementById('reset-cam-btn').addEventListener('click', resetToOverview);
+
+        // Quick bar click listeners
+        quickBtns.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const planetName = btn.getAttribute('data-planet');
+                const body = bodies.find(b => b.data.name === planetName);
+                if (body) {
+                    selectPlanet(body.data, body.mesh);
+                }
+            });
         });
 
         // --- Bottom Controls ---
@@ -750,37 +835,32 @@
 
         const topViewBtn = document.getElementById('topview-btn');
         topViewBtn.addEventListener('click', () => {
-            focusedTarget = null;
-            currentViewIndex = 0; // Top View
-            cycleBtn.textContent = `🎥 View: ${VIEWS[currentViewIndex].name}`;
+            focusedPlanetMesh = null;
+            camRadius = 110;
+            camPhi = 0.04; // Looking straight down from above!
+            targetLookAt.set(0, 0, 0);
+            panel.classList.remove('visible');
+            quickBtns.forEach(b => b.classList.remove('active'));
             playChime(750, 0.08, 0.2);
-        });
-
-        const cycleBtn = document.getElementById('cycle-btn');
-        cycleBtn.addEventListener('click', () => {
-            focusedTarget = null;
-            currentViewIndex = (currentViewIndex + 1) % VIEWS.length;
-            cycleBtn.textContent = `🎥 View: ${VIEWS[currentViewIndex].name}`;
-            playChime(700, 0.08, 0.2);
         });
 
         // Keyboard Shortcuts
         window.addEventListener('keydown', (e) => {
             if (e.code === 'Space') pauseBtn.click();
-            if (e.code === 'KeyC') cycleBtn.click();
             if (e.code === 'KeyT') topViewBtn.click();
-            if (e.code === 'Escape') document.getElementById('close-panel-btn').click();
+            if (e.code === 'Escape') resetToOverview();
         });
 
-        // Resize Listener
+        // Resize
         window.addEventListener('resize', () => {
             camera.aspect = window.innerWidth / window.innerHeight;
             camera.updateProjectionMatrix();
             renderer.setSize(window.innerWidth, window.innerHeight);
         });
 
-        // --- Main Simulation & Render Loop ---
+        // --- Main Simulation Loop ---
         let lastTime = performance.now();
+        const desiredCamPos = new THREE.Vector3();
 
         function animate(now) {
             requestAnimationFrame(animate);
@@ -793,7 +873,7 @@
                     // Axial rotation
                     body.mesh.rotation.y += body.data.rotSpeed * speedMultiplier;
 
-                    // Orbital revolution around the Sun
+                    // Orbital revolution around Sun
                     if (body.data.orbitRadius > 0) {
                         body.currentAngle += body.data.orbitSpeed * speedMultiplier * delta * 0.8;
                         body.mesh.position.x = Math.cos(body.currentAngle) * body.data.orbitRadius;
@@ -801,28 +881,38 @@
                     }
                 }
 
-                // Smooth scale interpolation on hover
+                // Smooth hover scale
                 const targetScale = body.targetScale || 1.0;
                 body.mesh.scale.lerp(new THREE.Vector3(targetScale, targetScale, targetScale), delta * 8);
             });
 
-            // 2. VR Gaze Raycast
-            updateGazeRaycast(delta);
+            // 2. VR Gaze Reticle
+            updateGazeReticle(delta);
 
-            // 3. Camera Interpolation
-            if (focusedTarget) {
-                const targetWorldPos = focusedTarget.position.clone();
-                const camOffset = new THREE.Vector3(0, focusedTarget.userData.radius * 2.5, focusedTarget.userData.radius * 4.5);
-                cameraTargetPos.copy(targetWorldPos.clone().add(camOffset));
-                cameraLookAt.copy(targetWorldPos);
+            // 3. Smooth Camera Positioning
+            if (focusedPlanetMesh) {
+                // Focus tightly on the selected planet as it moves!
+                const planetPos = focusedPlanetMesh.position;
+                targetLookAt.lerp(planetPos, delta * 6);
+
+                const focusDist = Math.max(6, focusedPlanetMesh.userData.radius * 4.0);
+                desiredCamPos.set(
+                    planetPos.x + Math.sin(camTheta) * focusDist,
+                    planetPos.y + focusDist * 0.45,
+                    planetPos.z + Math.cos(camTheta) * focusDist
+                );
             } else {
-                const view = VIEWS[currentViewIndex];
-                cameraTargetPos.copy(view.pos);
-                cameraLookAt.copy(view.look);
+                // Orbiting around the center Sun
+                targetLookAt.lerp(new THREE.Vector3(0, 0, 0), delta * 4);
+                desiredCamPos.set(
+                    camRadius * Math.sin(camPhi) * Math.sin(camTheta),
+                    camRadius * Math.cos(camPhi),
+                    camRadius * Math.sin(camPhi) * Math.cos(camTheta)
+                );
             }
 
-            camera.position.lerp(cameraTargetPos, delta * 3.5);
-            camera.lookAt(cameraLookAt);
+            camera.position.lerp(desiredCamPos, delta * 4.5);
+            camera.lookAt(targetLookAt);
 
             renderer.render(scene, camera);
         }
