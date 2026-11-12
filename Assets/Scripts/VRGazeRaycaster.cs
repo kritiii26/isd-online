@@ -39,6 +39,7 @@ public class VRGazeRaycaster : MonoBehaviour
     // Internal tracking state
     private PlanetController currentHoveredPlanet;
     private float currentDwellTimer = 0.0f;
+    private bool hasSelectedCurrentHover = false;
     private Vector3 defaultReticleScale = Vector3.one;
     private Vector3 hoveredReticleScale = new Vector3(1.6f, 1.6f, 1.0f);
 
@@ -85,9 +86,9 @@ public class VRGazeRaycaster : MonoBehaviour
         {
             PlanetController planet = hit.collider.GetComponentInParent<PlanetController>();
 
-            if (planet != null)
+            if (planet != null && planet.name != "Sun")
             {
-                // Hovering over a new planet or continuing hover
+                // Hovering over a new planet
                 if (currentHoveredPlanet != planet)
                 {
                     ResetCurrentHover();
@@ -100,15 +101,18 @@ public class VRGazeRaycaster : MonoBehaviour
                     }
                 }
 
-                // Accumulate dwell timer
-                currentDwellTimer += Time.deltaTime;
-                UpdateReticleUI(currentDwellTimer / gazeDwellDuration, true);
-
-                // Dwell activation reached
-                if (currentDwellTimer >= gazeDwellDuration)
+                // Accumulate dwell timer only if not already selected
+                if (!hasSelectedCurrentHover)
                 {
-                    SelectPlanet(currentHoveredPlanet);
-                    currentDwellTimer = 0.0f; // Reset to avoid repeated instant triggers
+                    currentDwellTimer += Time.deltaTime;
+                    UpdateReticleUI(currentDwellTimer / gazeDwellDuration, true);
+
+                    // Dwell activation reached
+                    if (currentDwellTimer >= gazeDwellDuration)
+                    {
+                        hasSelectedCurrentHover = true;
+                        SelectPlanet(currentHoveredPlanet);
+                    }
                 }
 
                 return;
@@ -123,15 +127,30 @@ public class VRGazeRaycaster : MonoBehaviour
     }
 
     /// <summary>
-    /// Checks for Cardboard physical trigger, screen tap, or mouse click.
+    /// Checks for direct mouse click on planets, Cardboard physical trigger, or screen tap.
     /// </summary>
     private void CheckInputTrigger()
     {
-        bool triggered = Input.GetMouseButtonDown(0) || 
-                         Input.GetButtonDown("Fire1") || 
-                         (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began);
+        bool mouseClicked = Input.GetMouseButtonDown(0);
+        bool vrTriggered = Input.GetButtonDown("Fire1") || (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began);
 
-        if (triggered && currentHoveredPlanet != null)
+        if (mouseClicked && vrCamera != null)
+        {
+            // Direct click on any planet anywhere on screen!
+            Ray clickRay = vrCamera.ScreenPointToRay(Input.mousePosition);
+            RaycastHit clickHit;
+            if (Physics.Raycast(clickRay, out clickHit, maxGazeDistance, interactableLayers))
+            {
+                PlanetController clickedPlanet = clickHit.collider.GetComponentInParent<PlanetController>();
+                if (clickedPlanet != null)
+                {
+                    SelectPlanet(clickedPlanet);
+                    return;
+                }
+            }
+        }
+
+        if ((mouseClicked || vrTriggered) && currentHoveredPlanet != null)
         {
             SelectPlanet(currentHoveredPlanet);
         }
@@ -174,6 +193,7 @@ public class VRGazeRaycaster : MonoBehaviour
         }
 
         currentDwellTimer = 0.0f;
+        hasSelectedCurrentHover = false;
         UpdateReticleUI(0f, false);
     }
 

@@ -59,11 +59,21 @@ public class SolarSystemUIManager : MonoBehaviour
 
     private void LateUpdate()
     {
-        // Keep the World Space UI billboarded towards the camera
-        if (infoPanel != null && infoPanel.activeSelf && vrCamera != null)
+        // Keep the World Space UI billboarded towards the camera only if in WorldSpace mode
+        if (infoPanel != null && infoPanel.activeSelf)
         {
-            // Billboard effect: UI panel faces VR camera orientation
-            infoPanel.transform.rotation = vrCamera.transform.rotation;
+            Canvas canvas = GetComponentInParent<Canvas>();
+            if (canvas == null) canvas = infoPanel.GetComponentInParent<Canvas>();
+
+            if (canvas != null && canvas.renderMode == RenderMode.WorldSpace && vrCamera != null)
+            {
+                infoPanel.transform.rotation = vrCamera.transform.rotation;
+            }
+            else
+            {
+                // In ScreenSpaceOverlay, keep flat so text is never reversed
+                infoPanel.transform.localRotation = Quaternion.identity;
+            }
         }
 
         // Support keyboard hotkeys for convenience during development/grading
@@ -110,9 +120,31 @@ public class SolarSystemUIManager : MonoBehaviour
             infoPanel.SetActive(false);
         }
 
+        if (cameraController != null)
+        {
+            cameraController.ResetToOverview();
+        }
+
         if (audioFeedback != null)
         {
             audioFeedback.PlayClickTone();
+        }
+    }
+
+    /// <summary>
+    /// Finds and focuses a planet by name.
+    /// </summary>
+    public void FocusPlanetByName(string name)
+    {
+        PlanetController[] allPlanets = Object.FindObjectsByType<PlanetController>(FindObjectsSortMode.None);
+        foreach (var p in allPlanets)
+        {
+            if (p.gameObject.name.Equals(name, System.StringComparison.OrdinalIgnoreCase))
+            {
+                PlanetData data = p.GetPlanetData();
+                DisplayPlanetInfo(data, p.transform);
+                return;
+            }
         }
     }
 
@@ -235,5 +267,16 @@ public class SolarSystemUIManager : MonoBehaviour
         {
             CloseInfoPanel();
         }
+
+        // Quick keys to jump straight to any planet!
+        if (Input.GetKeyDown(KeyCode.Alpha1)) FocusPlanetByName("Mercury");
+        if (Input.GetKeyDown(KeyCode.Alpha2)) FocusPlanetByName("Venus");
+        if (Input.GetKeyDown(KeyCode.Alpha3)) FocusPlanetByName("Earth");
+        if (Input.GetKeyDown(KeyCode.Alpha4)) FocusPlanetByName("Mars");
+        if (Input.GetKeyDown(KeyCode.Alpha5)) FocusPlanetByName("Jupiter");
+        if (Input.GetKeyDown(KeyCode.Alpha6)) FocusPlanetByName("Saturn");
+        if (Input.GetKeyDown(KeyCode.Alpha7)) FocusPlanetByName("Uranus");
+        if (Input.GetKeyDown(KeyCode.Alpha8)) FocusPlanetByName("Neptune");
+        if (Input.GetKeyDown(KeyCode.Alpha0)) FocusPlanetByName("Sun");
     }
 }

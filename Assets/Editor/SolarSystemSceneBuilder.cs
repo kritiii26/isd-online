@@ -147,6 +147,9 @@ public static class SolarSystemSceneBuilder
         pointLight.range = 160f;
         pointLight.intensity = 2.4f;
 
+        // Remove Sun's collider so forward gaze raycast is not permanently blocked by the central star
+        Object.DestroyImmediate(sun.GetComponent<Collider>());
+
         // Scripts
         SunGlow glow = sun.AddComponent<SunGlow>();
         glow.sunLight = pointLight;
@@ -315,13 +318,13 @@ public static class SolarSystemSceneBuilder
         canvasObj.AddComponent<CanvasScaler>();
         canvasObj.AddComponent<GraphicRaycaster>();
 
-        // Center Reticle
+        // Center Reticle (subtle 8x8 dot pointer)
         GameObject reticleObj = new GameObject("VR_Reticle");
         reticleObj.transform.SetParent(canvasObj.transform, false);
         reticleRect = reticleObj.AddComponent<RectTransform>();
-        reticleRect.sizeDelta = new Vector2(16, 16);
+        reticleRect.sizeDelta = new Vector2(8, 8);
         reticleImg = reticleObj.AddComponent<Image>();
-        reticleImg.color = new Color(1f, 1f, 1f, 0.85f);
+        reticleImg.color = new Color(1f, 1f, 1f, 0.90f);
 
         // Info Panel
         infoPanel = new GameObject("PlanetInfoPanel");

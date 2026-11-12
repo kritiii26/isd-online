@@ -98,11 +98,25 @@ public class CameraController : MonoBehaviour
             return;
         }
 
-        Vector3 targetPos = focusedPlanet.position - (focusedPlanet.forward * focusDistance) + (Vector3.up * focusHeight);
+        float scale = focusedPlanet.localScale.x;
+        float actualDist = Mathf.Max(6.0f, scale * 3.2f);
+        float actualHeight = Mathf.Max(2.0f, scale * 1.2f);
+
+        Vector3 targetPos = focusedPlanet.position - (focusedPlanet.forward * actualDist) + (Vector3.up * actualHeight);
         transform.position = Vector3.Lerp(transform.position, targetPos, Time.deltaTime * positionLerpSpeed);
 
         Quaternion targetRot = Quaternion.LookRotation(focusedPlanet.position - transform.position);
         transform.rotation = Quaternion.Slerp(transform.rotation, targetRot, Time.deltaTime * rotationSlerpSpeed);
+    }
+
+    /// <summary>
+    /// Resets camera to standard angled overview.
+    /// </summary>
+    public void ResetToOverview()
+    {
+        focusedPlanet = null;
+        currentView = ViewMode.AngledPerspective;
+        ApplyPreset(currentView);
     }
 
     private void InterpolateToTransform(Vector3 targetPos, Quaternion targetRot)
@@ -179,6 +193,7 @@ public class CameraController : MonoBehaviour
     {
         if (!enableMouseLook) return;
 
+        // Hold Right-Click or Alt to look around in 360 degrees
         if (Input.GetMouseButton(1) || Input.GetKey(KeyCode.LeftAlt))
         {
             isMouseLooking = true;
