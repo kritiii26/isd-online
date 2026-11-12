@@ -1,30 +1,13 @@
-# Virtual Solar System (Mobile VR & AI)
+# Virtual Solar System (Mobile VR)
 
-**NPTEL Swayam Course Project:** Mobile Virtual Reality and Artificial Intelligence (`noc26_cs186`)  
-**Instructor:** Prof. Varun Dutt, IIT Mandi  
 **Primary Engine:** Unity 3D & C# Scripting  
 
 ---
 
 ## 🌌 Project Overview
-The **Virtual Solar System** is an interactive Mobile Virtual Reality (VR) application designed strictly within the syllabus and tools taught in **NPTEL NOC26_CS186: Mobile Virtual Reality and Artificial Intelligence**.
+The **Virtual Solar System** is an interactive Mobile Virtual Reality (VR) application built with Unity 3D and C#.
 
 Users explore the Sun and the eight revolving planets of our solar system (Mercury, Venus, Earth with Moon, Mars, Jupiter, Saturn with rings, Uranus, and Neptune). In accordance with Google Cardboard / Mobile VR design principles, user interaction is driven by **Gaze Raycasting** and a **Center Reticle Pointer**: simply gazing at any celestial body reveals a detailed, interactive 3D World-Space Information Card featuring real astronomical data and scientific facts.
-
----
-
-## 📚 Direct Mapping to NPTEL Course Syllabus
-
-| Course Module | Concepts Taught in NOC26_CS186 | Implementation in this Project | Corresponding Script / Asset |
-| :--- | :--- | :--- | :--- |
-| **Week 1: Foundations & Unity Setup** | Unity Editor interface, GameObjects, 3D Primitives (Sphere, Cylinder), Transforms | Sun (glowing sphere), 8 planets with scaled radii, Saturn's rings | `Assets/Scenes/SolarSystemVR.unity`, `SolarSystemSceneBuilder.cs` |
-| **Week 1: Materials & Lighting** | Creating Materials, Colors, Emission, Point & Directional Lights | Sun with Emissive yellow material + central `PointLight` casting real-time light and shadows onto revolving planets | `SunGlow.cs`, Standard / URP Materials |
-| **Week 1: C# Programming** | `MonoBehaviour`, variables, methods, `Start()`, `Update()`, `transform.Rotate`, `transform.RotateAround` | Daily axial rotation (`transform.Rotate`) and orbital revolution (`transform.RotateAround`) | `PlanetController.cs`, `PlanetData.cs` |
-| **Week 1: User Interaction** | Inputs (`Input.GetKeyDown`, `Input.GetMouseButtonDown`), Player movements, **Cycling Cameras** | 3 preset camera viewpoints (Top Overview, Angled Perspective, Inner Cockpit) + smooth target tracking | `CameraController.cs` |
-| **Week 1: Menus & UI Canvas** | Canvas, RectTransform, UI Text, Buttons, Panels | Planet Info Card (Name, Type, Distance, Periods, Moons, Facts), Pause/Resume toggle, Speed multiplier | `SolarSystemUIManager.cs` |
-| **Week 1: Particle Systems** | Particle System setup, emission, shape | Deep space 3D starfield backdrop with 800 twinkling particles | Built via `SolarSystemSceneBuilder.cs` |
-| **Week 4: Mobile VR & Cardboard** | Google VR / Cardboard SDK, **Gaze-based interaction**, **Reticle pointer**, **Raycasting** | Camera raycast (`Physics.Raycast`), center reticle with dwell progress ring (1.2s dwell) & screen tap trigger | `VRGazeRaycaster.cs`, `VRHeadTracker.cs` |
-| **Week 4: Mobile VR Head Tracking** | Gyroscope head tracking & Editor look emulation | Mobile device gyroscope (`Input.gyro.attitude`) with right-click mouse-look emulation in Editor | `VRHeadTracker.cs`, `CameraController.cs` |
 
 ---
 
@@ -82,7 +65,7 @@ Every celestial body contains pre-configured scientific data in its `PlanetData`
 
 ## 🌐 Instant In-Browser Preview (`index.html`)
 
-For instant verification or quick grading without launching Unity, a zero-dependency interactive WebGL 3D preview is provided in `index.html`:
+For instant preview without launching Unity, a zero-dependency interactive WebGL 3D preview is provided in `index.html`:
 - Double-click **`index.html`** or open it in Google Chrome / Safari / Firefox.
 - Features the exact same celestial bodies, rotation speeds, revolution speeds, VR gaze reticle, procedural audio chimes, and interactive info cards.
 
@@ -111,5 +94,5 @@ isd-online-project/
 ├── ProjectSettings/
 │   └── ProjectVersion.txt               # Unity version configuration
 ├── index.html                           # Standalone Web 3D interactive preview
-└── README.md                            # Complete course documentation
+└── README.md                            # Project documentation
 ```
